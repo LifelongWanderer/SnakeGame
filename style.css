@@ -34,6 +34,32 @@ h1 {
     justify-content: space-around;
     margin-bottom: 1rem;
     font-size: 1.2rem;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+.speed-control {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.speed-control button {
+    width: 30px;
+    height: 30px;
+    padding: 0;
+    border-radius: 50%;
+    font-size: 1.2rem;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#speedDisplay {
+    min-width: 20px;
+    text-align: center;
+    font-weight: bold;
 }
 
 .game-container {

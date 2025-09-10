@@ -9,6 +9,9 @@ const upBtn = document.getElementById('upBtn');
 const downBtn = document.getElementById('downBtn');
 const leftBtn = document.getElementById('leftBtn');
 const rightBtn = document.getElementById('rightBtn');
+const speedUpBtn = document.getElementById('speedUp');
+const speedDownBtn = document.getElementById('speedDown');
+const speedDisplay = document.getElementById('speedDisplay');
 
 const gridSize = 20;
 const tileCount = canvas.width / gridSize;
@@ -23,6 +26,7 @@ let score = 0;
 let highScore = localStorage.getItem('snakeHighScore') || 0;
 let gameRunning = false;
 let gamePaused = false;
+let gameSpeed = 1;
 
 highScoreElement.textContent = highScore;
 
@@ -53,7 +57,7 @@ function drawGame() {
     drawSnake();
     
     if (gameRunning) {
-        setTimeout(drawGame, 100);
+        setTimeout(drawGame, 200 - (gameSpeed * 15));
     }
 }
 
@@ -63,15 +67,45 @@ function clearCanvas() {
 }
 
 function drawSnake() {
-    ctx.fillStyle = '#4CAF50';
     snake.forEach((segment, index) => {
         if (index === 0) {
-            ctx.fillStyle = '#66BB6A';
+            drawTankHead(segment.x, segment.y);
         } else {
             ctx.fillStyle = '#4CAF50';
+            ctx.fillRect(segment.x * gridSize, segment.y * gridSize, gridSize - 2, gridSize - 2);
         }
-        ctx.fillRect(segment.x * gridSize, segment.y * gridSize, gridSize - 2, gridSize - 2);
     });
+}
+
+function drawTankHead(x, y) {
+    const centerX = x * gridSize + gridSize / 2;
+    const centerY = y * gridSize + gridSize / 2;
+    const size = gridSize - 4;
+    
+    if (dx === 1) {
+        ctx.fillStyle = '#2E7D32';
+        ctx.fillRect(x * gridSize + 2, y * gridSize + 4, size, size - 4);
+        ctx.fillStyle = '#1B5E20';
+        ctx.fillRect(x * gridSize + size - 2, y * gridSize + 6, 4, size - 8);
+    } else if (dx === -1) {
+        ctx.fillStyle = '#2E7D32';
+        ctx.fillRect(x * gridSize + 2, y * gridSize + 4, size, size - 4);
+        ctx.fillStyle = '#1B5E20';
+        ctx.fillRect(x * gridSize + 2, y * gridSize + 6, 4, size - 8);
+    } else if (dy === 1) {
+        ctx.fillStyle = '#2E7D32';
+        ctx.fillRect(x * gridSize + 4, y * gridSize + 2, size - 4, size);
+        ctx.fillStyle = '#1B5E20';
+        ctx.fillRect(x * gridSize + 6, y * gridSize + size - 2, size - 8, 4);
+    } else if (dy === -1) {
+        ctx.fillStyle = '#2E7D32';
+        ctx.fillRect(x * gridSize + 4, y * gridSize + 2, size - 4, size);
+        ctx.fillStyle = '#1B5E20';
+        ctx.fillRect(x * gridSize + 6, y * gridSize + 2, size - 8, 4);
+    } else {
+        ctx.fillStyle = '#66BB6A';
+        ctx.fillRect(x * gridSize + 2, y * gridSize + 2, size, size);
+    }
 }
 
 function moveSnake() {
@@ -84,8 +118,31 @@ function moveSnake() {
 }
 
 function drawFood() {
-    ctx.fillStyle = '#ff4444';
-    ctx.fillRect(food.x * gridSize, food.y * gridSize, gridSize - 2, gridSize - 2);
+    const centerX = food.x * gridSize + gridSize / 2;
+    const centerY = food.y * gridSize + gridSize / 2;
+    const size = gridSize / 2 - 2;
+    
+    ctx.fillStyle = '#ff6b6b';
+    ctx.strokeStyle = '#ff4444';
+    ctx.lineWidth = 2;
+    
+    ctx.beginPath();
+    ctx.moveTo(centerX, centerY - size);
+    ctx.lineTo(centerX + size, centerY);
+    ctx.lineTo(centerX, centerY + size);
+    ctx.lineTo(centerX - size, centerY);
+    ctx.closePath();
+    ctx.fill();
+    ctx.stroke();
+    
+    ctx.fillStyle = '#ffcccc';
+    ctx.beginPath();
+    ctx.moveTo(centerX, centerY - size * 0.6);
+    ctx.lineTo(centerX + size * 0.6, centerY);
+    ctx.lineTo(centerX, centerY + size * 0.6);
+    ctx.lineTo(centerX - size * 0.6, centerY);
+    ctx.closePath();
+    ctx.fill();
 }
 
 function checkFoodCollision() {
@@ -169,9 +226,18 @@ function resetGame() {
     dx = 0;
     dy = 0;
     score = 0;
+    gameSpeed = 1;
     scoreElement.textContent = score;
+    speedDisplay.textContent = gameSpeed;
     clearCanvas();
     drawSnake();
+}
+
+function changeSpeed(delta) {
+    if (!gameRunning) {
+        gameSpeed = Math.max(1, Math.min(10, gameSpeed + delta));
+        speedDisplay.textContent = gameSpeed;
+    }
 }
 
 document.addEventListener('keydown', (e) => {
@@ -235,6 +301,9 @@ rightBtn.addEventListener('click', () => {
         changeDirection(1, 0);
     }
 });
+
+speedUpBtn.addEventListener('click', () => changeSpeed(1));
+speedDownBtn.addEventListener('click', () => changeSpeed(-1));
 
 startBtn.addEventListener('click', startGame);
 pauseBtn.addEventListener('click', pauseGame);
