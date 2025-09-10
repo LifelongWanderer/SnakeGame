@@ -102,6 +102,66 @@ button:active {
     font-size: 0.9rem;
 }
 
+.mobile-controls {
+    display: none;
+    margin: 1rem 0;
+    padding: 1rem;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 15px;
+}
+
+.direction-controls {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: repeat(3, 1fr);
+    gap: 10px;
+    max-width: 200px;
+    margin: 0 auto;
+}
+
+.middle-row {
+    grid-column: 1 / -1;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.direction-btn {
+    background: linear-gradient(45deg, #2196F3, #1976D2);
+    color: white;
+    border: none;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    font-size: 1.5rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.direction-btn:hover {
+    transform: scale(1.1);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+}
+
+.direction-btn:active {
+    transform: scale(0.95);
+}
+
+#upBtn {
+    grid-column: 2;
+    grid-row: 1;
+}
+
+#downBtn {
+    grid-column: 2;
+    grid-row: 3;
+}
+
 @media (max-width: 600px) {
     .container {
         padding: 1rem;
@@ -120,5 +180,24 @@ button:active {
     button {
         margin: 5px;
         padding: 10px 20px;
+    }
+    
+    .mobile-controls {
+        display: block;
+    }
+    
+    .game-container {
+        margin: 0.5rem 0;
+    }
+    
+    #gameCanvas {
+        width: 300px;
+        height: 300px;
+    }
+    
+    .direction-btn {
+        width: 45px;
+        height: 45px;
+        font-size: 1.3rem;
     }
 }

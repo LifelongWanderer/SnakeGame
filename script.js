@@ -5,6 +5,10 @@ const highScoreElement = document.getElementById('highScore');
 const startBtn = document.getElementById('startBtn');
 const pauseBtn = document.getElementById('pauseBtn');
 const resetBtn = document.getElementById('resetBtn');
+const upBtn = document.getElementById('upBtn');
+const downBtn = document.getElementById('downBtn');
+const leftBtn = document.getElementById('leftBtn');
+const rightBtn = document.getElementById('rightBtn');
 
 const gridSize = 20;
 const tileCount = canvas.width / gridSize;
@@ -198,6 +202,37 @@ document.addEventListener('keydown', (e) => {
                 dy = 0;
             }
             break;
+    }
+});
+
+function changeDirection(newDx, newDy) {
+    if (gameRunning && !gamePaused) {
+        dx = newDx;
+        dy = newDy;
+    }
+}
+
+upBtn.addEventListener('click', () => {
+    if (dy !== 1) {
+        changeDirection(0, -1);
+    }
+});
+
+downBtn.addEventListener('click', () => {
+    if (dy !== -1) {
+        changeDirection(0, 1);
+    }
+});
+
+leftBtn.addEventListener('click', () => {
+    if (dx !== 1) {
+        changeDirection(-1, 0);
+    }
+});
+
+rightBtn.addEventListener('click', () => {
+    if (dx !== -1) {
+        changeDirection(1, 0);
     }
 });
 
